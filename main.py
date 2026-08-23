@@ -3,6 +3,8 @@ from fastapi import FastAPI
 import uvicorn
 from config.settings import APP_NAME, VERSION
 from features.auth.controllers import router as auth_router
+from features.projects.controllers import router as project_router
+from features.attendance.controllers import router as attendance_router
 
 # Inisialisasi Aplikasi FastAPI
 app = FastAPI(
@@ -18,6 +20,9 @@ def root():
 
 # Register Router dari Fitur (Tinggal tambah router baru di sini jika ada fitur baru)
 app.include_router(auth_router)
+app.include_router(auth_router)
+app.include_router(project_router)
+app.include_router(attendance_router)
 
 if __name__ == "__main__":
     uvicorn.run("main:app", host="127.0.0.1", port=8000, reload=True)

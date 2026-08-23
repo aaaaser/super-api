@@ -1,13 +1,20 @@
-# features/projects/services.py
-def create_project_logic(name: str, client_name: str, total_budget: float):
-    if not name or total_budget <= 0:
-        return {"status": "failed", "message": "Nama proyek dan anggaran harus valid"}
-    
-    return {
-        "status": "success",
-        "project_id": 101,
-        "name": name,
-        "client_name": client_name,
-        "total_budget": total_budget,
-        "project_status": "ON_PROGRESS"
-    }
+from sqlalchemy.orm import Session
+from features.projects.models import Project
+from features.projects.schemas import ProjectCreate
+
+def get_all_projects_db(db: Session):
+    return db.query(Project).all()
+
+def get_project_by_id_db(db: Session, project_id: int):
+    return db.query(Project).filter(Project.id == project_id).first()
+
+def create_project_db(db: Session, payload: ProjectCreate):
+    new_project = Project(
+        name=payload.name,
+        client_name=payload.client_name,
+        total_budget=payload.total_budget
+    )
+    db.add(new_project)
+    db.commit()
+    db.refresh(new_project)
+    return new_project

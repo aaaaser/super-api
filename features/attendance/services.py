@@ -1,14 +1,19 @@
-from datetime import datetime
+from sqlalchemy.orm import Session
+from features.attendance.models import Attendance
+from features.projects.models import Project
 
-def checkin_attendance_logic(student_id: int, project_id: int):
-    if student_id <= 0 or project_id <= 0:
-        return {"status": "failed", "message": "ID Siswa dan ID Proyek tidak valid"}
-    
-    return {
-        "status": "success",
-        "attendance_id": 501,
-        "student_id": student_id,
-        "project_id": project_id,
-        "timestamp": datetime.now().isoformat(),
-        "attendance_type": "CHECK_IN"
-    }
+def create_attendance_db(db: Session, student_id: str, project_id: int):
+    # Cek apakah project_id valid/tersedia
+    project = db.query(Project).filter(Project.id == project_id).first()
+    if not project:
+        return None
+
+    new_attendance = Attendance(
+        student_id=student_id,
+        project_id=project_id,
+        status="PRESENT"
+    )
+    db.add(new_attendance)
+    db.commit()
+    db.refresh(new_attendance)
+    return new_attendance

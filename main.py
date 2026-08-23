@@ -20,7 +20,6 @@ def root():
 
 # Register Router dari Fitur (Tinggal tambah router baru di sini jika ada fitur baru)
 app.include_router(auth_router)
-app.include_router(auth_router)
 app.include_router(project_router)
 app.include_router(attendance_router)
 

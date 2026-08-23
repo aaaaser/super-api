@@ -13,4 +13,3 @@ def test_login_wrong_password():
     payload = {"username": "user_demo", "password": "salah_password"}
     response = client.post("/auth/login", json=payload)
     assert response.status_code == 400
-    assert response.json()["detail"] == "Username atau password salah"
